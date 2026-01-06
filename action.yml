@@ -7,6 +7,12 @@ inputs:
   bgg_username:
     description: "The BoardGameGeek account to generate the portfolio for"
     required: true
+  bgg_password:
+    description: "The password of the BoardGameGeek account to authenticate with (either 'bgg_password' or 'bgg_token' is required)."
+    required: false
+  bgg_token:
+    description: "A BoardGameGeek API access token to authenticate with (either 'bgg_token' or 'bgg_password' is required)."
+    required: false
 runs:
   using: "composite"
   steps:
@@ -20,5 +26,5 @@ runs:
       shell: bash
 
     - name: Run generator
-      run: composer generate "${{ inputs.bgg_username }}"
+      run: php bin/bgg-portfolio-generator.php generate "${{ inputs.bgg_username }}" --bgg-token="${{ inputs.bgg_token }}" --bgg-password="${{ inputs.bgg_password }}"
       shell: bash
