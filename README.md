@@ -2,19 +2,25 @@
 
 **GitHub Action to generate a static portfolio website from a [BoardGameGeek](https://boardgamegeek.com) account.**
 
-This action installs and runs [`jan-wennrich/bgg-portfolio-generator`](https://github.com/JanWennrich/BGG-Portfolio-Generator) to build a personal board game portfolio site directly from your BGG collection.
+This action installs and runs [`jan-wennrich/bgg-portfolio-generator`](https://github.com/JanWennrich/BGG-Portfolio-Generator) to build a personal board game portfolio site directly from your BoardGameGeek collection.
 
 ## 📦 Inputs
 
 | Name           | Description                                               | Required |
 |----------------|-----------------------------------------------------------|----------|
 | `bgg_username` | The BoardGameGeek username to generate the portfolio for. | ✅ Yes    |
+| `bgg_password` | The password of the BoardGameGeek account to authenticate with. | ❌ No*    |
+| `bgg_token` | A BoardGameGeek API access token to authenticate with. | ❌ No*    |
+
+_* Either `bgg_password` or `bgg_token` is required_
+
+Information about the authentication methods can be found in the ["BGG Portfolio Generator" repository](https://github.com/JanWennrich/bgg-portfolio-generator?tab=readme-ov-file#-authentication).
 
 
 ## 🚀 Usage Example
 
 Here's an example on how to use this action to periodically generate a BoardGameGeek portoflio and publish it to GitHub pages.  
-_(Before you copy this example, make sure your repository has [GitHub Pages enabled](https://docs.github.com/en/pages/quickstart))_
+_(Before you copy this example, make sure your repository has [GitHub Pages enabled](https://docs.github.com/en/pages/quickstart) and a `bgg_password` secret configured)_
 
 ```yaml
 name: Generate & Publish BGG Portfolio
@@ -34,16 +40,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Generate HTML
+      # Generate portfolio
       - uses: JanWennrich/BGG-Portfolio-Generator-Action@main
         with:
           bgg_username: Klabauterjan
-      # Store HTML as a pages artifact
+          bgg_password: ${{ secrets.BGG_PASSWORD }}
+      # Store portfolio HTML as a pages artifact
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: "public"
 
+  # Deploy to GitHub Pages
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -62,7 +70,7 @@ Under the hood, this action:
 
 1. Sets up PHP 8.3.
 2. Installs [`jan-wennrich/bgg-portfolio-generator`](https://packagist.org/packages/jan-wennrich/bgg-portfolio-generator) via Composer.
-3. Runs the `composer generate` command for the given BGG username to generate a static portfolio website in `public/`
+3. Runs the `bgg-portfolio-generator.php` command for the given BGG username to generate a static portfolio website in `public/`
 
 
 ## 📝 Example Output
