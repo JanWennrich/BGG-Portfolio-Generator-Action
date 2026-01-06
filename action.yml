@@ -26,5 +26,9 @@ runs:
       shell: bash
 
     - name: Run generator
-      run: php bin/bgg-portfolio-generator.php generate "${{ inputs.bgg_username }}" --bgg-token="${{ inputs.bgg_token }}" --bgg-password="${{ inputs.bgg_password }}"
+      env:
+        BGG_USERNAME: ${{ inputs.bgg_username }}
+        BGG_PASSWORD: ${{ inputs.bgg_password }}
+        BGG_TOKEN: ${{ inputs.bgg_token }}
+      run: php bin/bgg-portfolio-generator.php generate "$BGG_USERNAME" --bgg-token="$BGG_TOKEN" --bgg-password="$BGG_PASSWORD"
       shell: bash
