@@ -30,5 +30,5 @@ runs:
         BGG_USERNAME: ${{ inputs.bgg_username }}
         BGG_PASSWORD: ${{ inputs.bgg_password }}
         BGG_TOKEN: ${{ inputs.bgg_token }}
-      run: php bin/bgg-portfolio-generator.php generate "$BGG_USERNAME" --bgg-token="$BGG_TOKEN" --bgg-password="$BGG_PASSWORD"
+      run: php bin/bgg-portfolio-generator.php --bgg-token="$BGG_TOKEN" --bgg-password="$BGG_PASSWORD" "$BGG_USERNAME"
       shell: bash
